@@ -10,6 +10,7 @@ const { Strategy: LocalStrategy } = require("passport-local");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const path = require("path");
+const { cpus } = require("os");
 
 passport.use(
   new LocalStrategy(
@@ -113,7 +114,7 @@ router.post(
 router.get("/logout", async (req, res) => {
   if (!req.user) return res.redirect("/login");
   const email = req.user.email;
-  req.logout(err => {
+  req.logout((err) => {
     if (err) return;
     return res.render("logout", { title: "Logout", name: email });
   });
@@ -124,10 +125,11 @@ router.get("/info", async (req, res) => {
     args: process.argv.slice(2),
     os: process.platform,
     node_v: process.version,
-    memory: process.memoryUsage(),
+    memory: process.memoryUsage().heapUsed,
     path: process.execPath,
     pid: process.pid,
     dir: process.cwd(),
+    cpus: cpus().length,
   };
 
   console.log(info);
@@ -144,7 +146,7 @@ router.get("/api/random", (req, res) => {
 
   forked.send({ start: true, amount });
 
-  forked.on("message", result => {
+  forked.on("message", (result) => {
     res.json(result);
   });
 });
