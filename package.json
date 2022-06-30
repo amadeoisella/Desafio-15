@@ -10,7 +10,7 @@
     "build": "rimraf build && tsc",
     "graph": "0x ./build/index.js",
     "inspect": "node --inspect ./build/index.js",
-    "start": "node build/src/index"
+    "start": "npm run build && node build/src/index"
   },
   "author": "",
   "license": "ISC",

@@ -52,8 +52,6 @@ const main = async () => {
         date: new Date(),
       };
 
-      // console.log(message);
-
       await Message.create(data);
 
       io.emit("message", data);
@@ -76,7 +74,6 @@ if (MODE === "CLUSTER") {
     console.log(`Number of CPUs is ${totalCPUs}`);
     console.log(`Master ${process.pid} is running`);
 
-    // Fork workers.
     for (let i = 0; i < totalCPUs; i++) {
       cluster.fork();
     }
