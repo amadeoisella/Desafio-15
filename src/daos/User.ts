@@ -1,4 +1,4 @@
-import { UserModel as UserModel } from "../models";
+import { UserModel } from "../models";
 
 export interface IUser {
   id?: string;

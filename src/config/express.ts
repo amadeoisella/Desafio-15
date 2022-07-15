@@ -1,5 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import router from "../routes";
+import { router } from "../routes";
 import MongoStore from "connect-mongo";
 import session from "express-session";
 import { engine as handlebars } from "express-handlebars";
