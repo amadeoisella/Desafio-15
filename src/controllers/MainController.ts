@@ -1,16 +1,19 @@
 import { Request, Response } from "express";
 import { cpus } from "node:os";
-import { Message, Product } from "../daos";
+import { DaoFactory, Message, Product } from "../daos";
 
 export class MainController {
+  static messageDao = DaoFactory.getDao("message");
+  static productDao = DaoFactory.getDao("product");
+
   static async renderMainPage(req: Request, res: Response) {
     if (!req.user) {
       return res.redirect("/login");
     }
 
-    const productos = await Product.getAll();
+    const productos = await this.productDao.getAll();
 
-    let messages = await Message.getAll();
+    let messages = await this.messageDao.getAll();
 
     res.render("main", { title: "Productos", productos, messages });
   }

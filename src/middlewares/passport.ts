@@ -1,14 +1,16 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { User } from "../daos";
+import { DaoFactory, User } from "../daos";
 import bcrypt from "bcrypt";
+
+const userDao = DaoFactory.getDao("user");
 
 passport.use(
   new LocalStrategy(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const user = await User.getByEmail(email);
+        const user = await userDao.getByEmail(email);
 
         if (!user) return done(null, false);
 

@@ -1,19 +1,11 @@
 import { Request, Response } from "express";
-import { Message, Product, User } from "../daos";
+import { DaoFactory, Message, Product, User } from "../daos";
 import bcrypt from "bcrypt";
 
 export class AuthController {
-  static async main(req: Request, res: Response) {
-    if (!req.user) {
-      return res.redirect("/login");
-    }
-
-    const productos = await Product.getAll();
-
-    let messages = await Message.getAll();
-
-    res.render("main", { title: "Productos", productos, messages });
-  }
+  static userDao = DaoFactory.getDao("user");
+  static messageDao = DaoFactory.getDao("message");
+  static productDao = DaoFactory.getDao("product");
 
   static async renderLogin(req: Request, res: Response) {
     res.render("login", { title: "Login" });
@@ -32,14 +24,14 @@ export class AuthController {
         });
       }
 
-      const user = await User.getByEmail(req.body.email);
+      const user = await this.userDao.getByEmail(req.body.email);
 
       if (user)
         return res.json({ error: true, message: "Email ya registrado" });
 
       const hashedPw = await bcrypt.hash(req.body.password, 10);
 
-      await User.create({
+      await this.userDao.create({
         email: req.body.email,
         password: hashedPw,
       });

@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { Message, Product, User } from "../daos";
+import { DaoFactory, Message, Product, User } from "../daos";
 
 export class MessageController {
+  private static messageDao = DaoFactory.getDao("message");
+
   static async getMessages(req: Request, res: Response) {
-    const messages = await Message.getAll();
+    const messages = await this.messageDao.getAll();
 
     res.json(messages);
   }

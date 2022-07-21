@@ -1,4 +1,4 @@
-import { ProductModel as ProductModel } from "../models";
+import { ProductModel } from "../models";
 
 interface IProduct {
   title: string;
@@ -8,23 +8,37 @@ interface IProduct {
 }
 
 export class Product {
-  static async create(data: IProduct) {
+  private static _instance: Product;
+
+  static getInstance() {
+    if (!this._instance) {
+      this._instance = new Product();
+    }
+    return this._instance;
+  }
+
+  public uid: string;
+  private constructor() {
+    this.uid = (Math.random() * 100).toString(36);
+  }
+
+  async create(data: IProduct) {
     return ProductModel.create(data);
   }
 
-  static async getAll() {
+  async getAll() {
     return ProductModel.find();
   }
 
-  static async getById(id: string) {
+  async getById(id: string) {
     return ProductModel.findById(id);
   }
 
-  static async update(id: string, data: IProduct) {
+  async update(id: string, data: IProduct) {
     return ProductModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  static async delete(id: string) {
+  async delete(id: string) {
     return ProductModel.findByIdAndDelete(id);
   }
 }

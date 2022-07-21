@@ -6,7 +6,7 @@ import { createApp } from "./config/express";
 import { connectDb } from "./config/db";
 import cluster from "cluster";
 import { cpus } from "os";
-import { Message, Product } from "./daos";
+import { DaoFactory, Message, Product } from "./daos";
 import "./middlewares/passport";
 
 dotenv.config();
@@ -25,6 +25,12 @@ const main = async () => {
   const server = http.createServer(app);
   const io = new Server(server);
 
+  const productDao = DaoFactory.getDao("product", "mongo");
+  const productDao2 = DaoFactory.getDao("product", "mongo");
+  const messageDao = DaoFactory.getDao("message", "mongo");
+
+  console.log(productDao.uid === productDao2.uid);
+
   io.on("connection", (socket) => {
     console.log("New conection", socket.id);
 
@@ -33,7 +39,7 @@ const main = async () => {
     });
 
     socket.on("add-product", async (product) => {
-      await Product.create(product);
+      await productDao.create(product);
 
       io.emit("update-products", product);
     });
@@ -52,7 +58,7 @@ const main = async () => {
         date: new Date(),
       };
 
-      await Message.create(data);
+      await messageDao.create(data);
 
       io.emit("message", data);
     });

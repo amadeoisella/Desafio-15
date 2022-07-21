@@ -7,27 +7,41 @@ export interface IUser {
 }
 
 export class User {
-  static async create(data: IUser) {
+  private static _instance: User;
+
+  static getInstance() {
+    if (!this._instance) {
+      this._instance = new User();
+    }
+    return this._instance;
+  }
+
+  public uid: string;
+  private constructor() {
+    this.uid = (Math.random() * 100).toString(36);
+  }
+
+  async create(data: IUser) {
     return UserModel.create(data);
   }
 
-  static async getAll() {
+  async getAll() {
     return UserModel.find();
   }
 
-  static async getById(id: string) {
+  async getById(id: string) {
     return UserModel.findById(id);
   }
 
-  static async getByEmail(email: string) {
+  async getByEmail(email: string) {
     return UserModel.findOne({ email });
   }
 
-  static async update(id: string, data: IUser) {
+  async update(id: string, data: IUser) {
     return UserModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  static async delete(id: string) {
+  async delete(id: string) {
     return UserModel.findByIdAndDelete(id);
   }
 }
