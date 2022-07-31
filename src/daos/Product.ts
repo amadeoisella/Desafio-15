@@ -1,6 +1,6 @@
 import { ProductModel } from "../models";
 
-interface IProduct {
+export interface IProduct {
   title: string;
   price: number;
   thumbnail: string;
@@ -34,11 +34,14 @@ export class Product {
     return ProductModel.findById(id);
   }
 
-  async update(id: string, data: IProduct) {
+  async update(id: string, data: Partial<IProduct>) {
     return ProductModel.findByIdAndUpdate(id, data, { new: true });
   }
 
   async delete(id: string) {
-    return ProductModel.findByIdAndDelete(id);
+    const bla = await ProductModel.findByIdAndDelete(id);
+    console.log(bla);
+
+    return bla;
   }
 }

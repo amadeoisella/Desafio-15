@@ -11,14 +11,14 @@ export class MainController {
       return res.redirect("/login");
     }
 
-    const productos = await this.productDao.getAll();
+    const productos = await MainController.productDao.getAll();
 
-    let messages = await this.messageDao.getAll();
+    let messages = await MainController.messageDao.getAll();
 
     res.render("main", { title: "Productos", productos, messages });
   }
 
-  static async renderServeInfoPage(req, res) {
+  static async renderServerInfoPage(req, res) {
     const info = {
       args: process.argv.slice(2),
       os: process.platform,

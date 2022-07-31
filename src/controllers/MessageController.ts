@@ -5,7 +5,7 @@ export class MessageController {
   private static messageDao = DaoFactory.getDao("message");
 
   static async getMessages(req: Request, res: Response) {
-    const messages = await this.messageDao.getAll();
+    const messages = await MessageController.messageDao.getAll();
 
     res.json(messages);
   }

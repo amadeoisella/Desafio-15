@@ -24,14 +24,14 @@ export class AuthController {
         });
       }
 
-      const user = await this.userDao.getByEmail(req.body.email);
+      const user = await AuthController.userDao.getByEmail(req.body.email);
 
       if (user)
         return res.json({ error: true, message: "Email ya registrado" });
 
       const hashedPw = await bcrypt.hash(req.body.password, 10);
 
-      await this.userDao.create({
+      await AuthController.userDao.create({
         email: req.body.email,
         password: hashedPw,
       });

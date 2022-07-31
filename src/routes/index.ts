@@ -8,12 +8,14 @@ import { Message, Product } from "../daos";
 import { authRouter } from "./auth.routes";
 import { mainRouter } from "./main.routes";
 import { messageRouter } from "./messages.routes";
+import { productRouter } from "./product.routes";
 
 const router = Router();
 
 router.use(messageRouter);
 router.use(authRouter);
 router.use(mainRouter);
+router.use("/products", productRouter);
 
 router.get("/api/random", (req, res) => {
   const amount = parseInt(req.query.cant as string) || 100_000_000;
